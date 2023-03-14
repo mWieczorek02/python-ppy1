@@ -22,6 +22,7 @@ def add_person():
     hair_color = input("input hair color ")
     eye_color = input("input eye color ")
     people.append(Person(name, height, hair_color, eye_color))
+    print(f"successfully added person with name {name}")
 
 
 def main():
