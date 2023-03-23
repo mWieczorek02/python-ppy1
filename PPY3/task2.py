@@ -19,7 +19,6 @@ def is_prime(num):
                 flag = True
                 break
 
-        # check if flag is True
         if flag:
             return False
         else:
@@ -36,17 +35,21 @@ def map_dividables(num):
 def main():
     user_input = input("input 20 numbers in range from -20 to 20: ")
     numbers = user_input.split(" ")
+
     if len(numbers) != 20:
         print("not 20 numbers")
         return
-    out_of_range = list(filter(lambda num: int(num) > 20 or int(num) < -20, numbers))
+    out_of_range = list(filter(lambda num: int(
+        num) > 20 or int(num) < -20, numbers))
     if out_of_range:
         print("some numbers are out of range")
         return
+
     list_copy = numbers.copy()
 
+    divided_and_powered = tuple(
+        map(lambda num: (int(num) / 2) ** 2, list_copy))
     primes = tuple(filter(lambda num: is_prime(int(num)), list_copy))
-    divided_and_powered = tuple(map(lambda num: (int(num) / 2) ** 2, list_copy))
     numbers = list(map(lambda num: map_dividables(int(num)), numbers))
 
     print(primes)
