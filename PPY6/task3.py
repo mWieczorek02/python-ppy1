@@ -2,18 +2,22 @@
 # pierwszych 75 liczb pierwszych.
 import math
 
+def f(pair):
+    _, val = pair
+    return val
 
 def sieve_of_eratosthenes(num):
-    prime = [True for i in range(num + 1)]
+    prime = {}
+    for i in range(2, num + 1):
+        prime[i] = True
     p = 2
-    while p * p <= num:
+    while p**2 <= num:
         if prime[p]:
-            for i in range(p * p, num + 1, p):
+            for i in range(p**2, num + 1, p):
                 prime[i] = False
         p += 1
-    for p in range(2, num + 1):
-        if prime[p]:
-            print(p)
+    l = dict(filter(f, prime.items()))
+    print(*list(l), sep=", ")
 
 
 def main():
