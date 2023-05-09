@@ -84,6 +84,16 @@ def print_word(word_dict):
     print()
 
 
+def check_if_guessed(word_dict):
+    guessed = True
+    for d in word_dict:
+        if d[1]:
+            pass
+        else:
+            guessed = False
+    return guessed
+
+
 def main():
     max_guesses = len(HANGMANS)
     word_to_guess = random.choice(WORD_LIST)
@@ -109,6 +119,9 @@ def main():
             print(HANGMANS[wrong_guesses])
             wrong_guesses += 1
         print_word(word_to_guess_dict)
+        if check_if_guessed(word_to_guess_dict):
+            print("you won!")
+            break
 
 
 if __name__ == "__main__":
