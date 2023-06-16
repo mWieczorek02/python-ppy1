@@ -11,7 +11,7 @@ class GameOfLife:
         self.stop_button = None
         self.start_button = None
         self.is_started = False
-        self.GRID_SIZE = 100
+        self.GRID_SIZE = 75
         self.CELL_SIZE = 10
         self.DELAY = 10
         self.grid = [[0] * self.GRID_SIZE for _ in range(self.GRID_SIZE)]
