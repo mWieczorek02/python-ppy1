@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: rgb(33, 33, 33);
+        color: white;
+      }
+
+      
+
+      a {
+        color: yellow;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      p {
+        margin-bottom: 10px;
+      }
+
+      .code-block {
+        background-color: black;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .code {
+        font-family: Consolas, monospace;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .screenshot {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <h1>Game of Life Sprawozdanie</h1>
+
+      <h2>Autor: Mikołaj Wieczorek grupa 15c</h2>
+      <p>Implementacja "Game of life" w pythonie.</p>
+      <p>
+        Kod źródłowy:
+        <a href="https://github.com/mWieczorek02/python-ppy1/tree/main/PROJECT"
+          >github.com/mWieczorek02</a
+        >
+      </p>
+    </div>
+    <h2>Proces projektowania</h2>
+    <ol>
+      <li>
+        Projektowanie interfejsu: Projektowanie graficznego interfejsu użytkownika przy użyciu biblioteki tkinter. Na początku utworzyłem prostą siatkę dla komórek oraz podstawowe przyciski do sterowania symulacją
+      </li>
+      <li>
+        Implementacja logiki gry: Implementacja zasad gry w życie oraz obsługi planszy. Początkowo program obsługiwał podstawowe zadsady gry Conwaya. W trakcie projektowania postanowiłem dodać input do zmiany zasad gry.
+      </li>
+      <li>
+        Integracja z interfejsem graficznym: Połączenie logiki gry z elementami interfejsu graficznego. Synchronizacja wszystkich zmiennych z symulacją gry
+      </li>
+      <li>
+        Testowanie i udoskonalenia: Testowanie gry, naprawianie błędów i optymalizacja kodu.
+      </li>
+    </ol>
+    <h3>Metoda draw_grid()</h3>
+    <p>Służy do wyrysowania na ekranie komórek</p>
+    <div class="code-block">
+      <pre class="code">
+def draw_grid(self):
+  self.canvas.delete("all")
+  for i in range(self.GRID_SIZE):
+      for j in range(self.GRID_SIZE):
+          if self.grid[i][j]:
+              self.canvas
+              .create_rectangle(
+                  j * self.CELL_SIZE, i * self.CELL_SIZE, (j + 1) * self.CELL_SIZE,
+                                           (i + 1) * self.CELL_SIZE,
+                                           fill="white")
+</pre
+      >
+    </div>
+    <h3>Metoda update_grid()</h3>
+    <p>
+      Metoda wykonuje się co klatkę programu. Jej celem jest sprawdzenie czy
+      komórka żyje czy umiera. W programie użytkownik ma możliwość zmiany zasad
+      gry, dlatego sprawdzam stan komórki za pomocą metody any(), tak jak w przykładowym
+      kodzie: <div class="code-block">any(map(lambda x: neighbors == int(x), self.first_rule))</div>
+      Przy sprawdzaniu sąsiednich komórek używam operacji modulo, aby brać pod uwagę sąsiadów wychodzących poza ramkę programu
+    </p>
+    <div class="code-block">
+      <pre class="code">
+def update_grid(self):
+  if self.is_started:
+    new_grid = [[0] * self.GRID_SIZE for _ in range(self.GRID_SIZE)]
+    for i in range(self.GRID_SIZE):
+        for j in range(self.GRID_SIZE):
+            neighbors = sum(
+                [
+                    self.grid[i - 1][j - 1],
+                    self.grid[i - 1][j],
+                    self.grid[i - 1][(j + 1) % self.GRID_SIZE],
+                    self.grid[i][j - 1],
+                    self.grid[i][(j + 1) % self.GRID_SIZE],
+                    self.grid[(i + 1) % self.GRID_SIZE][j - 1],
+                    self.grid[(i + 1) % self.GRID_SIZE][j],
+                    self.grid[(i + 1) % self.GRID_SIZE][(j + 1) % self.GRID_SIZE],
+                ]
+            
+            if self.grid[i][j] and
+             (any(map(lambda x: neighbors == int(x), self.first_rule))):
+                new_grid[i][j] = 1
+            elif not self.grid[i][j] and
+             any(map(lambda x: neighbors == int(x), self.second_rule)):
+                new_grid[i][j] = 1
+    for i in range(self.GRID_SIZE):
+        for j in range(self.GRID_SIZE):
+            self.grid[i][j] = new_grid[i][j]
+  self.draw_grid(
+  self.root.after(self.DELAY, self.update_grid)
+</pre
+      >
+    </div>
+    <h3>Metoda create_buttons()</h3>
+    <p>Metoda tworząca wszystkie przyciski ustawień gry</p>
+    <div class="code-block">
+      <pre class="code">
+def create_buttons(self):
+    self.start_button = tk.Button(
+        self.root, text='start', command=self.start)
+    self.stop_button = tk.Button(
+        self.root, text='stop', command=self.stop)
+    self.reset_button = tk.Button(
+        self.root, text='reset', command=self.reset)
+    self.rules_input = tk.Entry(self.root, textvariable=self.rules)
+    self.slider = tk.Scale(self.root, from_=1, to=1000, orient=tk.HORIZONTAL)
+    self.start_button.pack()
+    self.stop_button.pack()
+    self.reset_button.pack()
+    self.slider.pack()
+    self.rules_input.pack()
+    self.slider.bind("<ButtonRelease-1>", self.update_value)
+</pre
+      >
+    </div>
+    <h2>Podsumowanie</h2>
+    <p> 
+Udało mi się pomyślnie zaimplementować gre w życie. Program umożliwia uruchomienie gry, interakcję z nię za pomocą przycisków oraz manipulację reguł gry. Interfejs graficzny oparty na bibliotece tkinter zapewnia przyjazne użytkowanie.
+    </p>
+    <h2>Screenshoty</h2>
+    <div class="screenshot">
+      <img src="screenshot.png" alt="Screen 1" />
+      <p>Wygląd gry</p>
+    </div>
+    
+
+   
+
+    
+  </body>
+</html>
